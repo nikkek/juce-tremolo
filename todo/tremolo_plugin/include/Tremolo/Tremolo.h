@@ -25,6 +25,8 @@ public:
     for (auto& lfo : lfos) {
       lfo.prepare(processSpec);
     }
+
+    transitionDurationSamples = sampleRate * transitionDurationMs / 1000;
   }
 
   void setLfoWaveform(LfoWaveform waveform) {
@@ -71,17 +73,40 @@ private:
   // You should put class members and private functions here
 
   static float triangle(float phase) {
-    const auto ft = phase / juce::MathConstants<float>::twoPi;
-    return 4.f * std::abs(ft - std::floor(ft + 0.5f)) - 1.f;
+    // const auto ft = phase / juce::MathConstants<float>::twoPi;
+    // return 4.f * std::abs(ft - std::floor(ft + 0.5f)) - 1.f;
+    return std::abs(2 * phase / juce::MathConstants<float>::pi) - 1.f;
   }
 
   float getNextLfoValue() {
-    return lfos[juce::toUnderlyingType(currentLfo)].processSample(0.f);
+    if (isTransitioning) {
+      if (transitionProgress <= 1.f) {
+        currentLfoValue =
+            lfos[juce::toUnderlyingType(currentLfo)].processSample(0.f);
+        targetLfoValue =
+            lfos[juce::toUnderlyingType(lfoToSet)].processSample(0.f);
+
+        transitionedLfoValue =
+            (targetLfoValue - currentLfoValue) * transitionProgress +
+            currentLfoValue;
+
+        transitionProgress += 1.f / transitionDurationSamples;
+        return transitionedLfoValue;
+      } else {
+        transitionProgress = 0.f;
+        isTransitioning = false;
+        currentLfo = lfoToSet;
+        return lfos[juce::toUnderlyingType(currentLfo)].processSample(0.f);
+      }
+    } else {
+      return lfos[juce::toUnderlyingType(currentLfo)].processSample(0.f);
+    }
   }
 
   void updateLfoWaveform() {
-    if (currentLfo != lfoToSet) {
-      currentLfo = lfoToSet;
+    if (currentLfo != lfoToSet && !isTransitioning) {
+      isTransitioning = true;
+      transitionProgress = 0.f;
     }
   }
 
@@ -92,5 +117,12 @@ private:
 
   LfoWaveform currentLfo = LfoWaveform::sine;
   LfoWaveform lfoToSet = currentLfo;
+  float currentLfoValue;
+  float targetLfoValue;
+  float transitionedLfoValue;
+  float transitionProgress = 0.f;
+  float transitionDurationMs = 50.f;
+  float transitionDurationSamples = 1000.f;
+  bool isTransitioning = false;
 };
 }  // namespace tremolo
