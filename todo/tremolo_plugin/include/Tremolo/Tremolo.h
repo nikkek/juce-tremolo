@@ -26,13 +26,19 @@ public:
       lfo.prepare(processSpec);
     }
 
-    transitionDurationSamples = sampleRate * transitionDurationMs / 1000;
+    transitionDurationSamples = sampleRate * transitionDurationMs / 1000.f;
   }
 
   void setLfoWaveform(LfoWaveform waveform) {
     jassert(waveform == LfoWaveform::sine || waveform == LfoWaveform::triangle);
 
     lfoToSet = waveform;
+  }
+
+  void setModulationRate(float rateHz) {
+    for (auto& lfo : lfos) {
+      lfo.setFrequency(rateHz);
+    }
   }
 
   void process(juce::AudioBuffer<float>& buffer) noexcept {
