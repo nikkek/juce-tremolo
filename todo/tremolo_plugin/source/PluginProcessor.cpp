@@ -55,7 +55,15 @@ void PluginProcessor::prepareToPlay(double sampleRate,
   // Use this method as the place to do any pre-playback
   // initialization that you need, e.g., allocate memory.
 
+  gain.reset(sampleRate, 0.005);
+
   tremolo.prepare(sampleRate, expectedMaxFramesPerBlock);
+
+  bypassTransitionSmoother.prepare(
+      {.sampleRate = sampleRate,
+       .maximumBlockSize = static_cast<juce::uint32>(expectedMaxFramesPerBlock),
+       .numChannels = static_cast<juce::uint32>(juce::jmax(
+           getTotalNumInputChannels(), getTotalNumOutputChannels()))});
 }
 
 void PluginProcessor::releaseResources() {
@@ -63,6 +71,7 @@ void PluginProcessor::releaseResources() {
   // spare memory, etc.
 
   tremolo.reset();
+  bypassTransitionSmoother.reset();
 }
 
 bool PluginProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const {
@@ -103,13 +112,16 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float>& buffer,
   }
 
   // TODO: update parameters
-
   tremolo.setModulationRate(parameters.rate.get());
+  bypassTransitionSmoother.setBypass(parameters.bypassed.get());
 
   // TODO: check for bypass
-  if (parameters.bypassed.get()) {
+  if (parameters.bypassed.get() &&
+      !bypassTransitionSmoother.isTransitioning()) {
     return;
   }
+
+  bypassTransitionSmoother.setDryBuffer(buffer);
 
   // apply tremolo
   tremolo.process(buffer);
@@ -117,7 +129,27 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float>& buffer,
   // apply output gain
   auto gainInDecibels = parameters.gain.get();
   auto gainInLinear = juce::Decibels::decibelsToGain(gainInDecibels);
-  buffer.applyGain(gainInLinear);
+  gain.setTargetValue(gainInLinear);
+
+  for (const auto frameIndex : std::views::iota(0, buffer.getNumSamples())) {
+    auto nextGainValue = gain.getNextValue();
+    DBG(nextGainValue);
+
+    // for each channel sample in the frame
+    for (const auto channelIndex :
+         std::views::iota(0, buffer.getNumChannels())) {
+      // get the input sample
+      const auto inputSample = buffer.getSample(channelIndex, frameIndex);
+
+      // modulate the sample
+      const auto outputSample = inputSample * nextGainValue;
+
+      // set the output sample
+      buffer.setSample(channelIndex, frameIndex, outputSample);
+    }
+  }
+
+  bypassTransitionSmoother.mixToWetBuffer(buffer);
 }
 
 bool PluginProcessor::hasEditor() const {

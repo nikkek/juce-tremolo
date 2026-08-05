@@ -40,6 +40,10 @@ private:
 
   Parameters parameters{*this};
 
+  BypassTransitionSmoother bypassTransitionSmoother;
+
+  juce::LinearSmoothedValue<float> gain = 0.f;
+
   Tremolo tremolo;
 
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginProcessor)
