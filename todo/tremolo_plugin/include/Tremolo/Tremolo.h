@@ -86,7 +86,9 @@ private:
     return std::abs(2 * phase / juce::MathConstants<float>::pi) - 1.f;
   }
 
-  static float square(float phase) { return phase >= 0.0f ? 1.0f : -1.0f; }
+  static float square(float phase) {
+    return std::tanh(20.0f * std::sin(phase));
+  }
 
   float getNextLfoValue() {
     if (isTransitioning) {
