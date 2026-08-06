@@ -6,7 +6,7 @@ public:
   enum class LfoWaveform : size_t {
     sine = 0,
     triangle = 1,
-    square,
+    square = 2,
   };
 
   Tremolo() {
@@ -30,7 +30,9 @@ public:
   }
 
   void setLfoWaveform(LfoWaveform waveform) {
-    jassert(waveform == LfoWaveform::sine || waveform == LfoWaveform::triangle);
+    jassert(waveform == LfoWaveform::sine ||
+            waveform == LfoWaveform::triangle ||
+            waveform == LfoWaveform::square);
 
     lfoToSet = waveform;
   }
@@ -84,6 +86,8 @@ private:
     return std::abs(2 * phase / juce::MathConstants<float>::pi) - 1.f;
   }
 
+  static float square(float phase) { return phase >= 0.0f ? 1.0f : -1.0f; }
+
   float getNextLfoValue() {
     if (isTransitioning) {
       if (transitionProgress <= 1.f) {
@@ -116,9 +120,10 @@ private:
     }
   }
 
-  std::array<juce::dsp::Oscillator<float>, 2u> lfos{
+  std::array<juce::dsp::Oscillator<float>, 3u> lfos{
       juce::dsp::Oscillator<float>{[](auto phase) { return std::sin(phase); }},
       juce::dsp::Oscillator<float>{triangle},
+      juce::dsp::Oscillator<float>{square},
   };
 
   LfoWaveform currentLfo = LfoWaveform::sine;

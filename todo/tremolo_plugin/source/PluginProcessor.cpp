@@ -111,11 +111,11 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float>& buffer,
     buffer.clear(channelToClear, 0, buffer.getNumSamples());
   }
 
-  // TODO: update parameters
   tremolo.setModulationRate(parameters.rate.get());
   bypassTransitionSmoother.setBypass(parameters.bypassed.get());
+  tremolo.setLfoWaveform(
+      static_cast<Tremolo::LfoWaveform>(parameters.waveform.getIndex()));
 
-  // TODO: check for bypass
   if (parameters.bypassed.get() &&
       !bypassTransitionSmoother.isTransitioning()) {
     return;
@@ -133,7 +133,7 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float>& buffer,
 
   for (const auto frameIndex : std::views::iota(0, buffer.getNumSamples())) {
     auto nextGainValue = gain.getNextValue();
-    DBG(nextGainValue);
+    // DBG(nextGainValue);
 
     // for each channel sample in the frame
     for (const auto channelIndex :

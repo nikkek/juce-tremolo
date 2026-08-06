@@ -34,15 +34,24 @@ juce::AudioParameterBool& createBypassParameter(
       juce::ParameterID{"bypassed", versionHint}, "Bypass", false);
   return addParameterToProcessor(processor, std::move(parameter));
 }
+
+juce::AudioParameterChoice& createWaveformParameter(
+    juce::AudioProcessor& processor) {
+  constexpr auto versionHint = 1;
+  auto parameter = std::make_unique<juce::AudioParameterChoice>(
+      juce::ParameterID{"modulation.waveform", versionHint},
+      "Modulation waveform", juce::StringArray{"Sine", "Triangle", "Square"},
+      0);
+  return addParameterToProcessor(processor, std::move(parameter));
+}
+
 }  // namespace
 
 Parameters::Parameters(juce::AudioProcessor& processor)
-    // TODO: create parameters
-    // TODO: retrieve references to parameters
-    // TODO: add parameters to the processor
     : rate{createModulationRateParameter(processor)},
       gain{createGainParameter(processor)},
-      bypassed{createBypassParameter(processor)} {
+      bypassed{createBypassParameter(processor)},
+      waveform{createWaveformParameter(processor)} {
   juce::ignoreUnused(processor);
 }
 }  // namespace tremolo
