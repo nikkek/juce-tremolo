@@ -10,6 +10,7 @@ TEST(JsonSerializer, SerializeToString) {
   parameters.bypassed = true;
   parameters.waveform = 1;
   parameters.gain = 0.f;
+  parameters.depth = 0.f;
 
   const juce::String expectedOutput =
       u8R"({
@@ -18,7 +19,8 @@ TEST(JsonSerializer, SerializeToString) {
   "modulationRateHz": 10.0,
   "gain": 0.0,
   "bypassed": true,
-  "modulationWaveform": "Triangle"
+  "modulationWaveform": "Triangle",
+  "modulationDepth": 0.0
 })";
   juce::MemoryBlock block;
   juce::MemoryOutputStream outputStream{block, false};
@@ -39,7 +41,8 @@ TEST(JsonSerializer, DeserializeFromString) {
   "modulationRateHz": 10.0,
   "gain": 0.0,
   "bypassed": true,
-  "modulationWaveform": "Triangle"
+  "modulationWaveform": "Triangle",
+  "modulationDepth": 0.0
 })";
 
   juce::MemoryInputStream inputStream{
@@ -57,6 +60,7 @@ TEST(JsonSerializer, DeserializeFromString) {
   EXPECT_TRUE(parameters.bypassed);
   EXPECT_EQ(juce::String{"Triangle"},
             parameters.waveform.getCurrentChoiceName());
+  EXPECT_FLOAT_EQ(parameters.depth, 0.f);
 }
 
 TEST(JsonSerializer, DontUpdateParametersWhenWaveformNameIsInvalid) {
@@ -68,7 +72,8 @@ TEST(JsonSerializer, DontUpdateParametersWhenWaveformNameIsInvalid) {
   "modulationRateHz": 10.0,
   "gain": 0.0,
   "bypassed": true,
-  "modulationWaveform": "Foo"
+  "modulationWaveform": "Foo",
+  "modulationDepth": 0.0
 })";
 
   juce::MemoryInputStream inputStream{
@@ -82,6 +87,7 @@ TEST(JsonSerializer, DontUpdateParametersWhenWaveformNameIsInvalid) {
   parameters.bypassed = false;
   parameters.rate = 5.f;
   parameters.gain = 0.f;
+  parameters.depth = 0.0f;
 
   // when
   const auto result = JsonSerializer::deserialize(inputStream, parameters);
@@ -92,5 +98,6 @@ TEST(JsonSerializer, DontUpdateParametersWhenWaveformNameIsInvalid) {
   EXPECT_FLOAT_EQ(parameters.gain.get(), 0.f);
   EXPECT_FALSE(parameters.bypassed.get());
   EXPECT_EQ(0, parameters.waveform.getIndex());
+  EXPECT_FLOAT_EQ(parameters.depth, 0.f);
 }
 }  // namespace tremolo

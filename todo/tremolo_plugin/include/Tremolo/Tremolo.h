@@ -27,6 +27,8 @@ public:
     }
 
     transitionDurationSamples = sampleRate * transitionDurationMs / 1000.f;
+
+    depth.reset(sampleRate, 0.005);
   }
 
   void setLfoWaveform(LfoWaveform waveform) {
@@ -43,6 +45,10 @@ public:
     }
   }
 
+  void setModulationDepth(float depthValue) {
+    depth.setTargetValue(depthValue);
+  }
+
   void process(juce::AudioBuffer<float>& buffer) noexcept {
     updateLfoWaveform();
 
@@ -52,7 +58,10 @@ public:
       const auto lfoValue = getNextLfoValue();
 
       // calculate the modulation value
-      constexpr auto modulationDepth = 0.4f;
+      // constexpr auto modulationDepth = modulationDepth;
+
+      const auto modulationDepth = depth.getNextValue();
+
       const auto modulationValue =
           (1.0f - modulationDepth) + modulationDepth * (lfoValue + 1.0f) * 0.5f;
 
@@ -137,5 +146,6 @@ private:
   float transitionDurationMs = 50.f;
   float transitionDurationSamples = 1000.f;
   bool isTransitioning = false;
+  juce::LinearSmoothedValue<float> depth = 0.4f;
 };
 }  // namespace tremolo

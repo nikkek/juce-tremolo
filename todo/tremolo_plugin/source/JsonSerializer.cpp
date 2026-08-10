@@ -5,6 +5,7 @@ struct SerializableParameters {
   float gain;
   bool bypassed;
   juce::String waveform;
+  float depth;
 
   static constexpr auto marshallingVersion = 1;
 
@@ -26,16 +27,16 @@ struct SerializableParameters {
 
     archive(named("modulationRateHz", t.rate), named("gain", t.gain),
             named("bypassed", t.bypassed),
-            named("modulationWaveform", t.waveform));
+            named("modulationWaveform", t.waveform),
+            named("modulationDepth", t.depth));
   }
 };
 SerializableParameters from(const tremolo::Parameters& parameters) {
-  return {
-      .rate = parameters.rate.get(),
-      .gain = parameters.gain.get(),
-      .bypassed = parameters.bypassed.get(),
-      .waveform = parameters.waveform.getCurrentChoiceName(),
-  };
+  return {.rate = parameters.rate.get(),
+          .gain = parameters.gain.get(),
+          .bypassed = parameters.bypassed.get(),
+          .waveform = parameters.waveform.getCurrentChoiceName(),
+          .depth = parameters.depth.get()};
 }
 }  // namespace
 void JsonSerializer::serialize(const Parameters& parameters,
@@ -85,6 +86,7 @@ juce::Result JsonSerializer::deserialize(juce::InputStream& input,
   parameters.rate = parsedParameters->rate;
   parameters.gain = parsedParameters->gain;
   parameters.bypassed = parsedParameters->bypassed;
+  parameters.depth = parsedParameters->depth;
 
   return juce::Result::ok();
 }
