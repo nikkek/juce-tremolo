@@ -74,6 +74,13 @@ juce::Result JsonSerializer::deserialize(juce::InputStream& input,
 
   const auto modulationWaveformIndex =
       parameters.waveform.choices.indexOf(parsedParameters->waveform);
+
+  if (modulationWaveformIndex < 0) {
+    return juce::Result::fail(
+        "Modulation waveform name is invalid. Allowed values are: " +
+        parameters.waveform.choices.joinIntoString(", "));
+  }
+
   parameters.waveform = modulationWaveformIndex;
   parameters.rate = parsedParameters->rate;
   parameters.gain = parsedParameters->gain;
