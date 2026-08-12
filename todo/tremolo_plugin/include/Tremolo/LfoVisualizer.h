@@ -6,11 +6,11 @@ public:
 
     const auto strokeWidth = 4.f;
     const auto halfHeight = getHeight() / 2;
-    const auto amplitude = halfHeight - strokeWidth/2;
+    const auto amplitude = halfHeight - strokeWidth / 2;
 
     sine.startNewSubPath(0.f, halfHeight + amplitude * std::sin(0.f));
-    for (const auto x : std::views::iota(1, getWidth())) {
-      sine.lineTo(x, halfHeight + amplitude * std::sin(0.1f * x));
+    for (const auto x : std::views::iota(-4, getWidth() + 4)) {
+      sine.lineTo(x, halfHeight + amplitude * std::sin(0.05f * x));
     }
 
     g.setColour(juce::Colours::beige);
