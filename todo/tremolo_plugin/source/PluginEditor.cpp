@@ -5,9 +5,15 @@ PluginEditor::PluginEditor(PluginProcessor& p) : AudioProcessorEditor(&p) {
 
   logo.setImage(
       juce::ImageCache::getFromMemory(assets::Logo_png, assets::Logo_pngSize));
+  logoCenter.setImage(
+      juce::ImageCache::getFromMemory(assets::Logo_png, assets::Logo_pngSize));
+  logoRight.setImage(
+      juce::ImageCache::getFromMemory(assets::Logo_png, assets::Logo_pngSize));
 
   addAndMakeVisible(background);
   addAndMakeVisible(logo);
+  addAndMakeVisible(logoCenter);
+  addAndMakeVisible(logoRight);
 
   // Make sure that before the constructor has finished, you've set the
   // editor's size to whatever you need it to be.
@@ -19,6 +25,9 @@ void PluginEditor::resized() {
 
   background.setBounds(bounds);
 
-  logo.setBounds({16, 16, 105, 24});
+  logo.setBounds({16, 16, 140, 22});
+  logoCenter.setSize(140, 22);
+  logoCenter.setCentrePosition(getWidth() / 2, 16 + 22 / 2);
+  logoRight.setBounds(getWidth() - 16 - 140, 16, 140, 22);
 }
 }  // namespace tremolo
