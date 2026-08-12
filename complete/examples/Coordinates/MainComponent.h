@@ -10,6 +10,8 @@ public:
     g.fillRect(rect1);
     g.setColour(juce::Colours::blue);
     g.fillRect(rect2);
+    g.setColour(juce::Colours::white);
+    g.fillEllipse(rect3);
   }
 
   void resized() override {
@@ -20,11 +22,14 @@ public:
                                    bounds.getWidth(), halfHeight};
     rect2 = juce::Rectangle<float>{bounds.getX(), bounds.getY() + halfHeight,
                                    bounds.getWidth(), halfHeight};
+    rect3 = juce::Rectangle<float>{bounds.getX(), bounds.getY(),
+                                   bounds.getWidth(), bounds.getHeight()};
   }
 
 private:
   juce::Rectangle<float> rect1;
   juce::Rectangle<float> rect2;
+  juce::Rectangle<float> rect3;
 };
 
 using MainComponent = Coordinates;
