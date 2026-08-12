@@ -10,6 +10,9 @@ public:
 private:
   juce::ImageComponent background;
   juce::ImageComponent logo;
+
+  LfoVisualizer lfoVisualizer;
+
   juce::ImageComponent logoCenter;
   juce::ImageComponent logoRight;
 

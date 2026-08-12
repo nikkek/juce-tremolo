@@ -12,6 +12,9 @@ PluginEditor::PluginEditor(PluginProcessor& p) : AudioProcessorEditor(&p) {
 
   addAndMakeVisible(background);
   addAndMakeVisible(logo);
+
+  addAndMakeVisible(lfoVisualizer);
+
   addAndMakeVisible(logoCenter);
   addAndMakeVisible(logoRight);
 
@@ -26,6 +29,9 @@ void PluginEditor::resized() {
   background.setBounds(bounds);
 
   logo.setBounds({16, 16, 140, 22});
+
+  lfoVisualizer.setBounds({19,150,502,92});
+
   logoCenter.setSize(140, 22);
   logoCenter.setCentrePosition(getWidth() / 2, 16 + 22 / 2);
   logoRight.setBounds(getWidth() - 16 - 140, 16, 140, 22);
