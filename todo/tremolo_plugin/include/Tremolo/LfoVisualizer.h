@@ -2,9 +2,13 @@ namespace tremolo {
 class LfoVisualizer : public juce::Component {
 public:
   void paint(juce::Graphics& g) override {
-    juce::Path sine;
+    g.setColour(juce::Colours::beige);
+    g.strokePath(sine, juce::PathStrokeType{strokeWidth});
+  }
 
-    const auto strokeWidth = 4.f;
+  void resized() override {
+    sine.clear();
+
     const auto halfHeight = getHeight() / 2;
     const auto amplitude = halfHeight - strokeWidth / 2;
 
@@ -12,9 +16,11 @@ public:
     for (const auto x : std::views::iota(-4, getWidth() + 4)) {
       sine.lineTo(x, halfHeight + amplitude * std::sin(0.05f * x));
     }
-
-    g.setColour(juce::Colours::beige);
-    g.strokePath(sine, juce::PathStrokeType{4.f});
   }
+
+private:
+  const float strokeWidth = 4.f;
+  juce::Path sine;
 };
+
 }  // namespace tremolo
