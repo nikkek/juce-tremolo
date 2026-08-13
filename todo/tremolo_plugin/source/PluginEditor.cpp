@@ -24,18 +24,26 @@ PluginEditor::PluginEditor(PluginProcessor& p) : AudioProcessorEditor(&p) {
   rateSlider.setTextValueSuffix(" Hz");
   addAndMakeVisible(rateSlider);
 
+  lfoCurveWidthSlider.setRange(0.0, 10.0, 1.0);
+  lfoCurveWidthSlider.onValueChange = [this] {
+      
+    lfoVisualizer.setStrokeWidth(
+        static_cast<float>(lfoCurveWidthSlider.getValue()));
+  };
+  addAndMakeVisible(lfoCurveWidthSlider);
+
   addAndMakeVisible(logoCenter);
   addAndMakeVisible(logoRight);
 
   // Make sure that before the constructor has finished, you've set the
   // editor's size to whatever you need it to be.
-  setSize(540, 270);
+  setSize(540, 300);
 }
 
 void PluginEditor::resized() {
   auto bounds = getLocalBounds();
 
-  background.setBounds(bounds);
+  background.setBounds({0, 0, bounds.getWidth(), bounds.getHeight() - 30});
 
   logo.setBounds({16, 16, 140, 22});
 
@@ -48,6 +56,11 @@ void PluginEditor::resized() {
   rateSliderBounds.removeFromTop(40);
   rateSliderBounds.removeFromBottom(150);
   rateSlider.setBounds(rateSliderBounds);
+
+  auto lfoCurveWidthSliderBounds = bounds;
+  lfoCurveWidthSliderBounds.removeFromTop(270);
+  lfoCurveWidthSliderBounds.removeFromRight(bounds.getWidth() / 2);
+  lfoCurveWidthSlider.setBounds(lfoCurveWidthSliderBounds);
 
   logoCenter.setSize(140, 22);
   logoCenter.setCentrePosition(getWidth() / 2, 16 + 22 / 2);

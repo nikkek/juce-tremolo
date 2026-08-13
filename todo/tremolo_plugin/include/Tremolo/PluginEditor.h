@@ -14,6 +14,7 @@ private:
   LfoVisualizer lfoVisualizer;
 
   juce::Slider rateSlider;
+  juce::Slider lfoCurveWidthSlider;
 
   juce::ImageComponent logoCenter;
   juce::ImageComponent logoRight;

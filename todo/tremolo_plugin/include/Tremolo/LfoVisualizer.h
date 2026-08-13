@@ -12,7 +12,9 @@ public:
     g.strokePath(path(currentLfoWaveform), juce::PathStrokeType{strokeWidth});
   }
 
-  void resized() override {
+  void resized() override { updatePaths(strokeWidth); }
+
+  void updatePaths(float strokeWidth) {
     for (auto& waveform : waveforms)
       waveform.clear();
 
@@ -43,6 +45,12 @@ public:
     repaint();
   }
 
+  void setStrokeWidth(float widthValue) {
+    strokeWidth = widthValue;
+    updatePaths(strokeWidth);
+    repaint();
+  }
+
 private:
   static float sine(float phase) { return std::sin(phase); }
 
@@ -54,7 +62,7 @@ private:
     return std::tanh(20.0f * std::sin(phase));
   }
 
-  const float strokeWidth = 4.f;
+  float strokeWidth = 4.f;
 
   std::array<juce::Path, 3> waveforms;
 
