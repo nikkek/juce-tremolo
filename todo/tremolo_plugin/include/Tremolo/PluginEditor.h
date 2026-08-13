@@ -16,6 +16,9 @@ private:
   juce::Slider rateSlider;
   juce::SliderParameterAttachment rateAttachment;
 
+  juce::Slider depthSlider;
+  juce::SliderParameterAttachment depthAttachment;
+
   juce::Slider lfoCurveWidthSlider;
 
   juce::ImageComponent logoCenter;
