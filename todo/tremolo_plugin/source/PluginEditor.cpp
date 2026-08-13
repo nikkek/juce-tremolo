@@ -31,6 +31,7 @@ void PluginEditor::resized() {
   logo.setBounds({16, 16, 140, 22});
 
   lfoVisualizer.setBounds({19,150,502,92});
+  //lfoVisualizer.setWaveform(LfoVisualizer::LfoWaveform::triangle);
 
   logoCenter.setSize(140, 22);
   logoCenter.setCentrePosition(getWidth() / 2, 16 + 22 / 2);

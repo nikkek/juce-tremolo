@@ -1,26 +1,68 @@
 namespace tremolo {
 class LfoVisualizer : public juce::Component {
 public:
+  enum class LfoWaveform : size_t {
+    sine = 0,
+    triangle = 1,
+    square = 2,
+  };
+
   void paint(juce::Graphics& g) override {
     g.setColour(juce::Colours::beige);
-    g.strokePath(sine, juce::PathStrokeType{strokeWidth});
+    g.strokePath(path(currentLfoWaveform), juce::PathStrokeType{strokeWidth});
   }
 
   void resized() override {
-    sine.clear();
+    for (auto& waveform : waveforms)
+      waveform.clear();
 
     const auto halfHeight = getHeight() / 2;
     const auto amplitude = halfHeight - strokeWidth / 2;
 
-    sine.startNewSubPath(0.f, halfHeight + amplitude * std::sin(0.f));
+    path(LfoWaveform::sine).startNewSubPath(0.f, halfHeight);
+
+    path(LfoWaveform::triangle).startNewSubPath(0.f, halfHeight);
+
+    path(LfoWaveform::square).startNewSubPath(0.f, halfHeight);
+
     for (const auto x : std::views::iota(-4, getWidth() + 4)) {
-      sine.lineTo(x, halfHeight + amplitude * std::sin(0.05f * x));
+      const auto phase = 0.05f * x;
+
+      path(LfoWaveform::sine).lineTo(x, halfHeight + amplitude * sine(phase));
+
+      path(LfoWaveform::triangle)
+          .lineTo(x, halfHeight + amplitude * triangle(phase));
+
+      path(LfoWaveform::square)
+          .lineTo(x, halfHeight + amplitude * square(phase));
     }
   }
 
+  void setWaveform(LfoWaveform waveform) {
+    currentLfoWaveform = waveform;
+    repaint();
+  }
+
 private:
+  static float sine(float phase) { return std::sin(phase); }
+
+  static float triangle(float phase) {
+    return (2.f / juce::MathConstants<float>::pi) * std::asin(std::sin(phase));
+  }
+
+  static float square(float phase) {
+    return std::tanh(20.0f * std::sin(phase));
+  }
+
   const float strokeWidth = 4.f;
-  juce::Path sine;
+
+  std::array<juce::Path, 3> waveforms;
+
+  LfoWaveform currentLfoWaveform = LfoWaveform::sine;
+
+  juce::Path& path(LfoWaveform waveform) {
+    return waveforms[static_cast<size_t>(waveform)];
+  }
 };
 
 }  // namespace tremolo
