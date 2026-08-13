@@ -2,7 +2,8 @@ namespace tremolo {
 PluginEditor::PluginEditor(PluginProcessor& p)
     : AudioProcessorEditor(&p),
       rateAttachment{p.getParameterRefs().rate, rateSlider},
-      depthAttachment{p.getParameterRefs().depth, depthSlider} {
+      depthAttachment{p.getParameterRefs().depth, depthSlider},
+      depthAttachment2{p.getParameterRefs().depth, depthSlider2} {
   background.setImage(juce::ImageCache::getFromMemory(
       assets::Background_png, assets::Background_pngSize));
 
@@ -30,6 +31,12 @@ PluginEditor::PluginEditor(PluginProcessor& p)
   depthSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
   depthSlider.setPopupDisplayEnabled(true, true, this);
   addAndMakeVisible(depthSlider);
+
+  depthSlider2.setSliderStyle(
+      juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+  depthSlider2.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+  depthSlider2.setPopupDisplayEnabled(true, true, this);
+  addAndMakeVisible(depthSlider2);
 
   lfoCurveWidthSlider.setRange(0.0, 10.0, 1.0);
   lfoCurveWidthSlider.onValueChange = [this] {
@@ -69,6 +76,13 @@ void PluginEditor::resized() {
   depthSliderBounds.removeFromTop(40);
   depthSliderBounds.removeFromBottom(150);
   depthSlider.setBounds(depthSliderBounds);
+
+  auto depthSliderBounds2 = bounds;
+  depthSliderBounds2.removeFromLeft(30);
+  depthSliderBounds2.removeFromRight(430);
+  depthSliderBounds2.removeFromTop(40);
+  depthSliderBounds2.removeFromBottom(150);
+  depthSlider2.setBounds(depthSliderBounds2);
 
   auto lfoCurveWidthSliderBounds = bounds;
   lfoCurveWidthSliderBounds.removeFromTop(270);
