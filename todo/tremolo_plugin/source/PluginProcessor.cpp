@@ -117,6 +117,8 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float>& buffer,
       static_cast<Tremolo::LfoWaveform>(parameters.waveform.getIndex()));
   tremolo.setModulationDepth(parameters.depth.get());
 
+  //DBG(parameters.rate.get());
+
   if (parameters.bypassed.get() &&
       !bypassTransitionSmoother.isTransitioning()) {
     return;

@@ -1,5 +1,7 @@
 namespace tremolo {
-PluginEditor::PluginEditor(PluginProcessor& p) : AudioProcessorEditor(&p) {
+PluginEditor::PluginEditor(PluginProcessor& p)
+    : AudioProcessorEditor(&p),
+      rateAttachment{p.getParameterRefs().rate, rateSlider} {
   background.setImage(juce::ImageCache::getFromMemory(
       assets::Background_png, assets::Background_pngSize));
 
@@ -19,14 +21,11 @@ PluginEditor::PluginEditor(PluginProcessor& p) : AudioProcessorEditor(&p) {
       juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
   rateSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
   rateSlider.setPopupDisplayEnabled(true, true, this);
-  rateSlider.setRange(1.0, 30.0, 0.5);
-  rateSlider.onValueChange = [this] { DBG(rateSlider.getValue()); };
   rateSlider.setTextValueSuffix(" Hz");
   addAndMakeVisible(rateSlider);
 
   lfoCurveWidthSlider.setRange(0.0, 10.0, 1.0);
   lfoCurveWidthSlider.onValueChange = [this] {
-      
     lfoVisualizer.setStrokeWidth(
         static_cast<float>(lfoCurveWidthSlider.getValue()));
   };
