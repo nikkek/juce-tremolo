@@ -15,6 +15,15 @@ PluginEditor::PluginEditor(PluginProcessor& p) : AudioProcessorEditor(&p) {
 
   addAndMakeVisible(lfoVisualizer);
 
+  rateSlider.setSliderStyle(
+      juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+  rateSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+  rateSlider.setPopupDisplayEnabled(true, true, this);
+  rateSlider.setRange(1.0, 30.0, 0.5);
+  rateSlider.onValueChange = [this] { DBG(rateSlider.getValue()); };
+  rateSlider.setTextValueSuffix(" Hz");
+  addAndMakeVisible(rateSlider);
+
   addAndMakeVisible(logoCenter);
   addAndMakeVisible(logoRight);
 
@@ -24,14 +33,21 @@ PluginEditor::PluginEditor(PluginProcessor& p) : AudioProcessorEditor(&p) {
 }
 
 void PluginEditor::resized() {
-  const auto bounds = getLocalBounds();
+  auto bounds = getLocalBounds();
 
   background.setBounds(bounds);
 
   logo.setBounds({16, 16, 140, 22});
 
-  lfoVisualizer.setBounds({19,150,502,92});
-  //lfoVisualizer.setWaveform(LfoVisualizer::LfoWaveform::triangle);
+  lfoVisualizer.setBounds({19, 150, 502, 92});
+  // lfoVisualizer.setWaveform(LfoVisualizer::LfoWaveform::triangle);
+
+  auto rateSliderBounds = bounds;
+  rateSliderBounds.removeFromLeft(230);
+  rateSliderBounds.removeFromRight(230);
+  rateSliderBounds.removeFromTop(40);
+  rateSliderBounds.removeFromBottom(150);
+  rateSlider.setBounds(rateSliderBounds);
 
   logoCenter.setSize(140, 22);
   logoCenter.setCentrePosition(getWidth() / 2, 16 + 22 / 2);
