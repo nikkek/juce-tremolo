@@ -13,7 +13,7 @@ private:
 
   LfoVisualizer lfoVisualizer;
 
-  juce::Slider rateSlider;
+  RateSlider rateSlider;
   juce::SliderParameterAttachment rateAttachment;
 
   juce::Slider depthSlider;
