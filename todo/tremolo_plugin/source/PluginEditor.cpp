@@ -3,7 +3,8 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     : AudioProcessorEditor(&p),
       rateAttachment{p.getParameterRefs().rate, rateSlider},
       depthAttachment{p.getParameterRefs().depth, depthSlider},
-      depthAttachment2{p.getParameterRefs().depth, depthSlider2} {
+      depthAttachment2{p.getParameterRefs().depth, depthSlider2},
+      bypassAttachment{p.getParameterRefs().bypassed, bypassButton} {
   background.setImage(juce::ImageCache::getFromMemory(
       assets::Background_png, assets::Background_pngSize));
 
@@ -16,6 +17,13 @@ PluginEditor::PluginEditor(PluginProcessor& p)
 
   addAndMakeVisible(background);
   addAndMakeVisible(logo);
+
+  bypassButton.onClick = [this] {
+    bypassButton.setButtonText(bypassButton.getToggleState() ? "BYPASSED"
+                                                             : "OFF");
+  };
+  bypassButton.onClick();
+  addAndMakeVisible(bypassButton);
 
   addAndMakeVisible(lfoVisualizer);
 
@@ -88,6 +96,13 @@ void PluginEditor::resized() {
   lfoCurveWidthSliderBounds.removeFromTop(270);
   lfoCurveWidthSliderBounds.removeFromRight(bounds.getWidth() / 2);
   lfoCurveWidthSlider.setBounds(lfoCurveWidthSliderBounds);
+
+  auto buttonBounds = bounds;
+  buttonBounds.removeFromTop(66);
+  buttonBounds.removeFromRight(16);
+  buttonBounds.removeFromLeft(392);
+  buttonBounds.removeFromBottom(176);
+  bypassButton.setBounds(buttonBounds);
 
   logoCenter.setSize(140, 22);
   logoCenter.setCentrePosition(getWidth() / 2, 16 + 22 / 2);

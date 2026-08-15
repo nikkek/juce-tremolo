@@ -22,6 +22,9 @@ private:
   juce::Slider depthSlider2;
   juce::SliderParameterAttachment depthAttachment2;
 
+  juce::ToggleButton bypassButton{"BYPASSED"};
+  juce::ButtonParameterAttachment bypassAttachment;
+
   juce::Slider lfoCurveWidthSlider;
 
   juce::ImageComponent logoCenter;
