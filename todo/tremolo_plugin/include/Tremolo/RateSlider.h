@@ -22,18 +22,21 @@ public:
     auto lineW = juce::jmin(8.0f, radius * 0.5f);
     auto arcRadius = radius - lineW * 0.5f;
 
-
     if (isEnabled()) {
       juce::Path valueArc;
-      valueArc.addPieSegment(getLocalBounds().toFloat(), rotaryStartAngle,
-                             toAngle, 0);
+      // valueArc.addPieSegment(getLocalBounds().toFloat(), rotaryStartAngle,
+      // toAngle, 0);
 
-      g.setColour(juce::Colours::beige);
-      g.fillPath(valueArc);
+      valueArc.addCentredArc(bounds.getCentreX(), bounds.getCentreY(),
+                             arcRadius, arcRadius, 0.0f, rotaryStartAngle,
+                             toAngle, true);
+
+      g.setColour(juce::Colours::red);
+      // g.fillPath(valueArc);
+      g.strokePath(valueArc,
+                   juce::PathStrokeType(4, juce::PathStrokeType::curved,
+                                        juce::PathStrokeType::rounded));
     }
-
-
-
   }
 };
 }  // namespace tremolo
