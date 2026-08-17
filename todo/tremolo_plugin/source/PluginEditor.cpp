@@ -3,7 +3,8 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     : AudioProcessorEditor(&p),
       rateAttachment{p.getParameterRefs().rate, rateSlider},
       depthAttachment{p.getParameterRefs().depth, depthSlider},
-      bypassAttachment{p.getParameterRefs().bypassed, bypassButton} {
+      bypassAttachment{p.getParameterRefs().bypassed, bypassButton},
+      waveformAttachment{p.getParameterRefs().waveform, waveformComboBox} {
   background.setImage(juce::ImageCache::getFromMemory(
       assets::Background_png, assets::Background_pngSize));
 
@@ -19,6 +20,10 @@ PluginEditor::PluginEditor(PluginProcessor& p)
   };
   bypassButton.onClick();
   addAndMakeVisible(bypassButton);
+
+  waveformComboBox.addItemList(p.getParameterRefs().waveform.choices, 1);
+  waveformAttachment.sendInitialUpdate();
+  addAndMakeVisible(waveformComboBox);
 
   addAndMakeVisible(lfoVisualizer);
 
@@ -89,5 +94,12 @@ void PluginEditor::resized() {
   buttonBounds.removeFromLeft(392);
   buttonBounds.removeFromBottom(176);
   bypassButton.setBounds(buttonBounds);
+
+  auto waveformComboBoxBounds = bounds;
+  waveformComboBoxBounds.removeFromTop(66);
+  waveformComboBoxBounds.removeFromRight(392);
+  waveformComboBoxBounds.removeFromLeft(16);
+  waveformComboBoxBounds.removeFromBottom(176);
+  waveformComboBox.setBounds(waveformComboBoxBounds);
 }
 }  // namespace tremolo

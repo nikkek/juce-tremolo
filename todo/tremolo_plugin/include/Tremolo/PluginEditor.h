@@ -23,6 +23,9 @@ private:
   juce::ToggleButton bypassButton{"BYPASSED"};
   juce::ButtonParameterAttachment bypassAttachment;
 
+  juce::ComboBox waveformComboBox;
+  juce::ComboBoxParameterAttachment waveformAttachment;
+
   // juce::Slider lfoCurveWidthSlider;
 
   CustomLookAndFeel lookAndFeel;
