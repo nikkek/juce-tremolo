@@ -3,16 +3,11 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     : AudioProcessorEditor(&p),
       rateAttachment{p.getParameterRefs().rate, rateSlider},
       depthAttachment{p.getParameterRefs().depth, depthSlider},
-      depthAttachment2{p.getParameterRefs().depth, depthSlider2},
       bypassAttachment{p.getParameterRefs().bypassed, bypassButton} {
   background.setImage(juce::ImageCache::getFromMemory(
       assets::Background_png, assets::Background_pngSize));
 
   logo.setImage(
-      juce::ImageCache::getFromMemory(assets::Logo_png, assets::Logo_pngSize));
-  logoCenter.setImage(
-      juce::ImageCache::getFromMemory(assets::Logo_png, assets::Logo_pngSize));
-  logoRight.setImage(
       juce::ImageCache::getFromMemory(assets::Logo_png, assets::Logo_pngSize));
 
   addAndMakeVisible(background);
@@ -20,7 +15,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
 
   bypassButton.onClick = [this] {
     bypassButton.setButtonText(bypassButton.getToggleState() ? "BYPASSED"
-                                                             : "OFF");
+                                                             : "BYPASS");
   };
   bypassButton.onClick();
   addAndMakeVisible(bypassButton);
@@ -40,31 +35,29 @@ PluginEditor::PluginEditor(PluginProcessor& p)
   depthSlider.setPopupDisplayEnabled(true, true, this);
   addAndMakeVisible(depthSlider);
 
-  depthSlider2.setSliderStyle(
-      juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-  depthSlider2.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
-  depthSlider2.setPopupDisplayEnabled(true, true, this);
-  addAndMakeVisible(depthSlider2);
-
-  lfoCurveWidthSlider.setRange(0.0, 10.0, 1.0);
+  /* lfoCurveWidthSlider.setRange(0.0, 10.0, 1.0);
   lfoCurveWidthSlider.onValueChange = [this] {
     lfoVisualizer.setStrokeWidth(
         static_cast<float>(lfoCurveWidthSlider.getValue()));
   };
-  addAndMakeVisible(lfoCurveWidthSlider);
-
-  addAndMakeVisible(logoCenter);
-  addAndMakeVisible(logoRight);
+  addAndMakeVisible(lfoCurveWidthSlider);*/
 
   // Make sure that before the constructor has finished, you've set the
   // editor's size to whatever you need it to be.
-  setSize(540, 300);
+
+  setLookAndFeel(&lookAndFeel);
+
+  setSize(540, 270);
+}
+
+PluginEditor::~PluginEditor() {
+  setLookAndFeel(nullptr);
 }
 
 void PluginEditor::resized() {
   auto bounds = getLocalBounds();
 
-  background.setBounds({0, 0, bounds.getWidth(), bounds.getHeight() - 30});
+  background.setBounds({0, 0, bounds.getWidth(), bounds.getHeight()});
 
   logo.setBounds({16, 16, 140, 22});
 
@@ -85,17 +78,10 @@ void PluginEditor::resized() {
   depthSliderBounds.removeFromBottom(150);
   depthSlider.setBounds(depthSliderBounds);
 
-  auto depthSliderBounds2 = bounds;
-  depthSliderBounds2.removeFromLeft(30);
-  depthSliderBounds2.removeFromRight(430);
-  depthSliderBounds2.removeFromTop(40);
-  depthSliderBounds2.removeFromBottom(150);
-  depthSlider2.setBounds(depthSliderBounds2);
-
-  auto lfoCurveWidthSliderBounds = bounds;
+  /* auto lfoCurveWidthSliderBounds = bounds;
   lfoCurveWidthSliderBounds.removeFromTop(270);
   lfoCurveWidthSliderBounds.removeFromRight(bounds.getWidth() / 2);
-  lfoCurveWidthSlider.setBounds(lfoCurveWidthSliderBounds);
+  lfoCurveWidthSlider.setBounds(lfoCurveWidthSliderBounds);*/
 
   auto buttonBounds = bounds;
   buttonBounds.removeFromTop(66);
@@ -103,9 +89,5 @@ void PluginEditor::resized() {
   buttonBounds.removeFromLeft(392);
   buttonBounds.removeFromBottom(176);
   bypassButton.setBounds(buttonBounds);
-
-  logoCenter.setSize(140, 22);
-  logoCenter.setCentrePosition(getWidth() / 2, 16 + 22 / 2);
-  logoRight.setBounds(getWidth() - 16 - 140, 16, 140, 22);
 }
 }  // namespace tremolo

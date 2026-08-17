@@ -4,6 +4,7 @@ namespace tremolo {
 class PluginEditor : public juce::AudioProcessorEditor {
 public:
   explicit PluginEditor(PluginProcessor&);
+  ~PluginEditor() override;
 
   void resized() override;
 
@@ -19,16 +20,12 @@ private:
   juce::Slider depthSlider;
   juce::SliderParameterAttachment depthAttachment;
 
-  juce::Slider depthSlider2;
-  juce::SliderParameterAttachment depthAttachment2;
-
   juce::ToggleButton bypassButton{"BYPASSED"};
   juce::ButtonParameterAttachment bypassAttachment;
 
-  juce::Slider lfoCurveWidthSlider;
+  // juce::Slider lfoCurveWidthSlider;
 
-  juce::ImageComponent logoCenter;
-  juce::ImageComponent logoRight;
+  CustomLookAndFeel lookAndFeel;
 
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginEditor)
 };
