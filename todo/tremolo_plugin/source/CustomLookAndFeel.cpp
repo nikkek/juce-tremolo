@@ -10,8 +10,12 @@ void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
         juce::Colour{0xFF189076}, juce::Colour{0xFF14ab7b}, bounds);
 
     buttonGradient.addColour(0.73, juce::Colour{0xFF009b77});
+
     g.setGradientFill(buttonGradient);
 
+    if (shouldDrawButtonAsHighlighted) {
+      g.setOpacity(0.7f);
+    }
     g.fillRoundedRectangle(bounds.toFloat(), 4.f);
 
     g.setColour(juce::Colour{0xFFf3ff00});
@@ -22,6 +26,9 @@ void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
     buttonGradient.addColour(0.73, juce::Colour{0xFF009b77});
     g.setGradientFill(buttonGradient);
 
+    if (shouldDrawButtonAsHighlighted) {
+      g.setOpacity(0.7f);
+    }
     g.fillRoundedRectangle(bounds.toFloat(), 4.f);
 
     g.setColour(juce::Colours::beige);
