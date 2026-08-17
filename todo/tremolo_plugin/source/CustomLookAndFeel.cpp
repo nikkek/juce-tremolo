@@ -5,6 +5,12 @@ void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
                                          bool shouldDrawButtonAsDown) {
   const auto bounds = button.getLocalBounds().reduced(2);
 
+  auto outlineBounds = button.getLocalBounds();
+  auto outlineGradient = juce::ColourGradient::vertical(
+      juce::Colour{0xFF008171}, juce::Colour{0xFF004d44}, outlineBounds);
+  g.setGradientFill(outlineGradient);
+  g.fillRoundedRectangle(outlineBounds.toFloat(), 6.f);
+
   if (button.getToggleState()) {
     auto buttonGradient = juce::ColourGradient::vertical(
         juce::Colour{0xFF189076}, juce::Colour{0xFF14ab7b}, bounds);
