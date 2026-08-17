@@ -31,7 +31,7 @@ public:
                              arcRadius, arcRadius, 0.0f, rotaryStartAngle,
                              toAngle, true);
 
-      g.setColour(juce::Colours::red);
+      g.setColour(juce::Colour{0xff14ab7b});
       // g.fillPath(valueArc);
       g.strokePath(valueArc,
                    juce::PathStrokeType(4, juce::PathStrokeType::curved,
