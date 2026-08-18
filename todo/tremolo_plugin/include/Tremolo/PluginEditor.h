@@ -26,9 +26,14 @@ private:
   juce::ComboBox waveformComboBox;
   juce::ComboBoxParameterAttachment waveformAttachment;
 
+  juce::ComboBox lookAndFeelComboBox;
+
   // juce::Slider lfoCurveWidthSlider;
 
   CustomLookAndFeel lookAndFeel;
+  juce::LookAndFeel_V2 lookAndFeel_V2;
+  juce::LookAndFeel_V3 lookAndFeel_V3;
+  juce::LookAndFeel_V4 lookAndFeel_V4;
 
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginEditor)
 };

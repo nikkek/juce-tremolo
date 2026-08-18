@@ -8,4 +8,5 @@ public:
                         bool shouldDrawButtonAsHighlighted,
                         bool shouldDrawButtonAsDown) override;
 };
+
 }  // namespace tremolo

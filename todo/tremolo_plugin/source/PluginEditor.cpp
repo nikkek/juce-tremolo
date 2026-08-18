@@ -50,7 +50,30 @@ PluginEditor::PluginEditor(PluginProcessor& p)
   // Make sure that before the constructor has finished, you've set the
   // editor's size to whatever you need it to be.
 
-  setLookAndFeel(&lookAndFeel);
+  juce::StringArray lookAndFeelOptions{"Custom", "V2", "V3", "V4"};
+  lookAndFeelComboBox.addItemList(lookAndFeelOptions, 1);
+  lookAndFeelComboBox.onChange = [this] {
+    switch (lookAndFeelComboBox.getSelectedId()) {
+      case 1:
+        setLookAndFeel(&lookAndFeel);
+        break;
+
+      case 2:
+        setLookAndFeel(&lookAndFeel_V2);
+        break;
+
+      case 3:
+        setLookAndFeel(&lookAndFeel_V3);
+        break;
+
+      case 4:
+        setLookAndFeel(&lookAndFeel_V4);
+        break;
+    }
+  };
+  addAndMakeVisible(lookAndFeelComboBox);
+
+  // setLookAndFeel(&lookAndFeel);
 
   setSize(540, 270);
 }
@@ -101,5 +124,11 @@ void PluginEditor::resized() {
   waveformComboBoxBounds.removeFromLeft(16);
   waveformComboBoxBounds.removeFromBottom(176);
   waveformComboBox.setBounds(waveformComboBoxBounds);
+
+  auto lookAndFeelComboBoxBounds = bounds;
+  lookAndFeelComboBoxBounds.removeFromTop(254);
+  lookAndFeelComboBoxBounds.removeFromRight(bounds.getWidth() / 2);
+  lookAndFeelComboBoxBounds.removeFromLeft(16);
+  lookAndFeelComboBox.setBounds(lookAndFeelComboBoxBounds);
 }
 }  // namespace tremolo
