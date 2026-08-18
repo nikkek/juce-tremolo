@@ -21,6 +21,7 @@ private:
   juce::Slider depthSlider;
   juce::SliderParameterAttachment depthAttachment;
 
+  juce::Label bypassLabel{"bypass label", "BYPASS"};
   juce::ToggleButton bypassButton{"BYPASSED"};
   juce::ButtonParameterAttachment bypassAttachment;
 

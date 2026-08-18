@@ -14,9 +14,11 @@ PluginEditor::PluginEditor(PluginProcessor& p)
   addAndMakeVisible(background);
   addAndMakeVisible(logo);
 
+  addAndMakeVisible(bypassLabel);
+
   bypassButton.onClick = [this] {
-    bypassButton.setButtonText(bypassButton.getToggleState() ? "BYPASSED"
-                                                             : "BYPASS");
+    bypassButton.setButtonText(bypassButton.getToggleState() ? "Bypassed"
+                                                             : "Off");
   };
   bypassButton.onClick();
   addAndMakeVisible(bypassButton);
@@ -120,12 +122,16 @@ void PluginEditor::resized() {
   lfoCurveWidthSliderBounds.removeFromRight(bounds.getWidth() / 2);
   lfoCurveWidthSlider.setBounds(lfoCurveWidthSliderBounds);*/
 
-  auto buttonBounds = bounds;
-  buttonBounds.removeFromTop(66);
-  buttonBounds.removeFromRight(16);
-  buttonBounds.removeFromLeft(392);
-  buttonBounds.removeFromBottom(176);
-  bypassButton.setBounds(buttonBounds);
+  auto bypassButtonBounds = bounds;
+  bypassButtonBounds.removeFromTop(66);
+  bypassButtonBounds.removeFromRight(16);
+  bypassButtonBounds.removeFromLeft(392);
+  bypassButtonBounds.removeFromBottom(176);
+  bypassButton.setBounds(bypassButtonBounds);
+
+  const auto bypassLabelBounds =
+      bypassButtonBounds.translated(0, -bypassButtonBounds.getHeight());
+  bypassLabel.setBounds(bypassLabelBounds);
 
   auto waveformComboBoxBounds = bounds;
   waveformComboBoxBounds.removeFromTop(66);
