@@ -14,6 +14,7 @@ private:
 
   LfoVisualizer lfoVisualizer;
 
+  juce::Label rateLabel{"rate label", "RATE"};
   RateSlider rateSlider;
   juce::SliderParameterAttachment rateAttachment;
 
@@ -23,6 +24,7 @@ private:
   juce::ToggleButton bypassButton{"BYPASSED"};
   juce::ButtonParameterAttachment bypassAttachment;
 
+  juce::Label waveformLabel{"waveform label", "WAVEFORM"};
   juce::ComboBox waveformComboBox;
   juce::ComboBoxParameterAttachment waveformAttachment;
 

@@ -21,11 +21,17 @@ PluginEditor::PluginEditor(PluginProcessor& p)
   bypassButton.onClick();
   addAndMakeVisible(bypassButton);
 
+  addAndMakeVisible(waveformLabel);
+
   waveformComboBox.addItemList(p.getParameterRefs().waveform.choices, 1);
   waveformAttachment.sendInitialUpdate();
   addAndMakeVisible(waveformComboBox);
 
   addAndMakeVisible(lfoVisualizer);
+
+  rateLabel.setJustificationType(juce::Justification::centred);
+  rateLabel.setInterceptsMouseClicks(false, false);
+  addAndMakeVisible(rateLabel);
 
   rateSlider.setSliderStyle(
       juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
@@ -99,6 +105,9 @@ void PluginEditor::resized() {
   rateSliderBounds.removeFromBottom(150);
   rateSlider.setBounds(rateSliderBounds);
 
+  const auto rateLabelBounds = rateSliderBounds;
+  rateLabel.setBounds(rateLabelBounds);
+
   auto depthSliderBounds = bounds;
   depthSliderBounds.removeFromLeft(130);
   depthSliderBounds.removeFromRight(330);
@@ -124,6 +133,10 @@ void PluginEditor::resized() {
   waveformComboBoxBounds.removeFromLeft(16);
   waveformComboBoxBounds.removeFromBottom(176);
   waveformComboBox.setBounds(waveformComboBoxBounds);
+
+  const auto waveformLabelBounds =
+      waveformComboBoxBounds.translated(0, -waveformComboBoxBounds.getHeight());
+  waveformLabel.setBounds(waveformLabelBounds);
 
   auto lookAndFeelComboBoxBounds = bounds;
   lookAndFeelComboBoxBounds.removeFromTop(254);
