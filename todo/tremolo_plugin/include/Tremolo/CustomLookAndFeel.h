@@ -7,8 +7,13 @@ public:
                         juce::ToggleButton&,
                         bool shouldDrawButtonAsHighlighted,
                         bool shouldDrawButtonAsDown) override;
+
   static juce::FontOptions getSideLabelFonts() {
     return geistRegular().withPointHeight(10.f);
+  }
+
+  static juce::FontOptions getComponentFonts() {
+    return geistBold().withPointHeight(12.f);
   }
 
   juce::Colour textColour{0xFF008171};
@@ -17,6 +22,7 @@ public:
 
 private:
   static juce::FontOptions geistRegular();
+  static juce::FontOptions geistBold();
 };
 
 }  // namespace tremolo

@@ -107,6 +107,7 @@ juce_add_binary_data(tremolo_plugin_assets
     assets/Background.png
     assets/Logo.png
     assets/Geist-Regular.ttf
+    assets/Geist-Bold.ttf
 )
 
 add_library(tremolo::tremolo_plugin_assets ALIAS tremolo_plugin_assets)

@@ -39,6 +39,7 @@ void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
 
     g.setColour(juce::Colours::beige);
   }
+  g.setFont(getComponentFonts());
   g.drawText(button.getButtonText(), bounds, juce::Justification::centred,
              false);
 }
@@ -46,6 +47,13 @@ void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
 juce::FontOptions CustomLookAndFeel::geistRegular() {
   static const auto result = juce::Typeface::createSystemTypefaceFor(
       assets::GeistRegular_ttf, assets::GeistRegular_ttfSize);
+
+  return juce::FontOptions{result};
+}
+
+juce::FontOptions CustomLookAndFeel::geistBold() {
+  static const auto result = juce::Typeface::createSystemTypefaceFor(
+      assets::GeistBold_ttf, assets::GeistBold_ttfSize);
 
   return juce::FontOptions{result};
 }

@@ -23,6 +23,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
                                                              : "Off");
   };
   bypassButton.onClick();
+
   addAndMakeVisible(bypassButton);
 
   waveformLabel.setFont(lookAndFeel.getSideLabelFonts());
@@ -37,7 +38,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
 
   rateLabel.setJustificationType(juce::Justification::centred);
   rateLabel.setInterceptsMouseClicks(false, false);
-  rateLabel.setFont(lookAndFeel.getSideLabelFonts());
+  rateLabel.setFont(lookAndFeel.getComponentFonts());
   rateLabel.setColour(juce::Label::textColourId, lookAndFeel.textColour);
   addAndMakeVisible(rateLabel);
 
@@ -64,7 +65,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
   // Make sure that before the constructor has finished, you've set the
   // editor's size to whatever you need it to be.
 
-  juce::StringArray lookAndFeelOptions{"Custom", "V2", "V3", "V4"};
+  /* juce::StringArray lookAndFeelOptions{"Custom", "V2", "V3", "V4"};
   lookAndFeelComboBox.addItemList(lookAndFeelOptions, 1);
   lookAndFeelComboBox.onChange = [this] {
     switch (lookAndFeelComboBox.getSelectedId()) {
@@ -85,9 +86,9 @@ PluginEditor::PluginEditor(PluginProcessor& p)
         break;
     }
   };
-  addAndMakeVisible(lookAndFeelComboBox);
+  addAndMakeVisible(lookAndFeelComboBox);*/
 
-  // setLookAndFeel(&lookAndFeel);
+  setLookAndFeel(&lookAndFeel);
 
   setSize(540, 270);
 }
