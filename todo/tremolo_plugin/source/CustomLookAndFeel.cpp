@@ -24,7 +24,7 @@ void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
     }
     g.fillRoundedRectangle(bounds.toFloat(), 4.f);
 
-    g.setColour(juce::Colour{0xFFf3ff00});
+    g.setColour(accentColour);
   } else {
     auto buttonGradient = juce::ColourGradient::vertical(
         juce::Colour{0xFF14ab7b}, juce::Colour{0xFF189076}, bounds);
@@ -42,4 +42,12 @@ void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
   g.drawText(button.getButtonText(), bounds, juce::Justification::centred,
              false);
 }
+
+juce::FontOptions CustomLookAndFeel::geistRegular() {
+  static const auto result = juce::Typeface::createSystemTypefaceFor(
+      assets::GeistRegular_ttf, assets::GeistRegular_ttfSize);
+
+  return juce::FontOptions{result};
+}
+
 }  // namespace tremolo

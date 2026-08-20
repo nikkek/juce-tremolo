@@ -14,6 +14,8 @@ PluginEditor::PluginEditor(PluginProcessor& p)
   addAndMakeVisible(background);
   addAndMakeVisible(logo);
 
+  bypassLabel.setFont(lookAndFeel.getSideLabelFonts());
+  bypassLabel.setColour(juce::Label::textColourId, lookAndFeel.textColour);
   addAndMakeVisible(bypassLabel);
 
   bypassButton.onClick = [this] {
@@ -23,6 +25,8 @@ PluginEditor::PluginEditor(PluginProcessor& p)
   bypassButton.onClick();
   addAndMakeVisible(bypassButton);
 
+  waveformLabel.setFont(lookAndFeel.getSideLabelFonts());
+  waveformLabel.setColour(juce::Label::textColourId, lookAndFeel.textColour);
   addAndMakeVisible(waveformLabel);
 
   waveformComboBox.addItemList(p.getParameterRefs().waveform.choices, 1);
@@ -33,6 +37,8 @@ PluginEditor::PluginEditor(PluginProcessor& p)
 
   rateLabel.setJustificationType(juce::Justification::centred);
   rateLabel.setInterceptsMouseClicks(false, false);
+  rateLabel.setFont(lookAndFeel.getSideLabelFonts());
+  rateLabel.setColour(juce::Label::textColourId, lookAndFeel.textColour);
   addAndMakeVisible(rateLabel);
 
   rateSlider.setSliderStyle(
