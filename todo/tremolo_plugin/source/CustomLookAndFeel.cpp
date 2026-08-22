@@ -58,10 +58,8 @@ void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
   g.fillEllipse(bounds);
 
   juce::Path valueArc;
-  // valueArc.addPieSegment(getLocalBounds().toFloat(), rotaryStartAngle,
-  // toAngle, 0);
 
-  auto radius = juce::jmin(bounds.getWidth(), bounds.getHeight()) / 2.0f;
+  auto radius = juce::jmin(width - 2, height - 2) / 2.0f;
   auto toAngle =
       rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
   auto lineW = juce::jmin(8.0f, radius * 0.5f);
@@ -70,11 +68,52 @@ void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
   valueArc.addCentredArc(bounds.getCentreX(), bounds.getCentreY(), arcRadius,
                          arcRadius, 0.0f, rotaryStartAngle, toAngle, true);
 
-  g.setColour(juce::Colour{0xff14ab7b});
-  // g.fillPath(valueArc);
+  g.setColour(accentColour);
   g.strokePath(valueArc, juce::PathStrokeType(4, juce::PathStrokeType::curved,
                                               juce::PathStrokeType::rounded));
 
+  auto boundsInner = bounds.reduced(3.f);
+  /* auto gradient = juce::ColourGradient::vertical(
+      juce::Colour{0xFF189076}, juce::Colour{0xFF14ab7b}, boundsInner);
+  gradient.addColour(0.73, juce::Colour{0xFF009b77});
+  g.setGradientFill(gradient);
+  g.fillEllipse(boundsInner);*/
+
+  // boundsInner = boundsInner.reduced(1.25f);
+  auto gradient = juce::ColourGradient::vertical(
+      juce::Colour{0xFF008171}, juce::Colour{0xFF004d44}, boundsInner);
+  g.setGradientFill(gradient);
+  g.fillEllipse(boundsInner);
+
+  boundsInner = boundsInner.reduced(5.75f);
+  gradient = juce::ColourGradient::vertical(
+      juce::Colour{0xFF14ab7b}, juce::Colour{0xFF189076}, boundsInner);
+  gradient.addColour(0.73, juce::Colour{0xFF009b77});
+  g.setGradientFill(gradient);
+  g.setOpacity(0.7f);
+  g.fillEllipse(boundsInner);
+
+  // Gloss
+  auto glossBounds = boundsInner;
+
+  juce::ColourGradient gloss(juce::Colours::white.withAlpha(0.6f),
+                             glossBounds.getX(), glossBounds.getY(),
+
+                             juce::Colours::white.withAlpha(0.0f),
+                             glossBounds.getX(), glossBounds.getCentreY() - 10,
+                             false);
+
+  g.setGradientFill(gloss);
+  g.fillEllipse(glossBounds);
+
+  // Gloss
+  juce::ColourGradient shadow(
+      juce::Colours::black.withAlpha(0.0f), boundsInner.getX(),
+      boundsInner.getCentreY() + 10, juce::Colours::black.withAlpha(0.1f),
+      boundsInner.getX(), boundsInner.getBottom(), false);
+
+  g.setGradientFill(shadow);
+  g.fillEllipse(boundsInner);
 }
 
 juce::FontOptions CustomLookAndFeel::geistRegular() {
