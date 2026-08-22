@@ -15,10 +15,10 @@ private:
   LfoVisualizer lfoVisualizer;
 
   juce::Label rateLabel{"rate label", "RATE"};
-  RateSlider rateSlider;
+  juce::Slider rateSlider;
   juce::SliderParameterAttachment rateAttachment;
 
-  juce::Slider depthSlider;
+  RateSlider depthSlider;
   juce::SliderParameterAttachment depthAttachment;
 
   juce::Label bypassLabel{"bypass label", "BYPASS"};

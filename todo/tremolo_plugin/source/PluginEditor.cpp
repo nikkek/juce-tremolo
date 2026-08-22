@@ -36,18 +36,18 @@ PluginEditor::PluginEditor(PluginProcessor& p)
 
   addAndMakeVisible(lfoVisualizer);
 
-  rateLabel.setJustificationType(juce::Justification::centred);
-  rateLabel.setInterceptsMouseClicks(false, false);
-  rateLabel.setFont(lookAndFeel.getComponentFonts());
-  rateLabel.setColour(juce::Label::textColourId, lookAndFeel.textColour);
-  addAndMakeVisible(rateLabel);
-
   rateSlider.setSliderStyle(
       juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
   rateSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
   rateSlider.setPopupDisplayEnabled(true, true, this);
   rateSlider.setTextValueSuffix(" Hz");
   addAndMakeVisible(rateSlider);
+
+  rateLabel.setJustificationType(juce::Justification::centred);
+  rateLabel.setInterceptsMouseClicks(false, false);
+  rateLabel.setFont(lookAndFeel.getComponentFonts());
+  rateLabel.setColour(juce::Label::textColourId, juce::Colours::beige);
+  addAndMakeVisible(rateLabel);
 
   depthSlider.setSliderStyle(
       juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);

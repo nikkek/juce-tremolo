@@ -8,6 +8,17 @@ public:
                         bool shouldDrawButtonAsHighlighted,
                         bool shouldDrawButtonAsDown) override;
 
+  
+void drawRotarySlider(juce::Graphics& g,
+                                        int x,
+                                        int y,
+                                        int width,
+                                        int height,
+                                        float sliderPos,
+                                        const float rotaryStartAngle,
+                                        const float rotaryEndAngle,
+                                        juce::Slider& slider) override;
+
   static juce::FontOptions getSideLabelFonts() {
     return geistRegular().withPointHeight(10.f);
   }
