@@ -8,7 +8,8 @@ public:
   enum class Colors : size_t {
     textColour,
     secondaryColour,
-    accentColour
+    accentColour,
+    darkGreen
   };
 
   static juce::Colour getColor(Colors colorName);

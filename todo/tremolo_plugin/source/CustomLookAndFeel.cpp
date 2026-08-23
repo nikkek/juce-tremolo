@@ -2,14 +2,18 @@ namespace tremolo {
 CustomLookAndFeel::CustomLookAndFeel() {
   setColour(juce::PopupMenu::backgroundColourId, juce::Colour{0xff14ab7b});
   setColour(juce::PopupMenu::textColourId, juce::Colours::beige);
+  setColour(juce::PopupMenu::highlightedBackgroundColourId,
+            getColor(Colors::darkGreen));
+  setColour(juce::PopupMenu::highlightedTextColourId,
+            getColor(Colors::accentColour));
   setColour(juce::ComboBox::textColourId, juce::Colours::beige);
   setColour(juce::Label::textColourId, getColor(Colors::textColour));
 }
 
 juce::Colour CustomLookAndFeel::getColor(Colors colorName) {
-  static const std::array colors{juce::Colour{0xFF008171},
-                                 juce::Colour{0xFF008171},
-                                 juce::Colour{0xFFf3ff00}};
+  static const std::array colors{
+      juce::Colour{0xFF008171}, juce::Colour{0xFF008171},
+      juce::Colour{0xFFf3ff00}, juce::Colour{0xFF189076}};
   return colors.at(juce::toUnderlyingType(colorName));
 }
 
