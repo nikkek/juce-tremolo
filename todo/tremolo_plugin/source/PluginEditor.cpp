@@ -15,7 +15,9 @@ PluginEditor::PluginEditor(PluginProcessor& p)
   addAndMakeVisible(logo);
 
   bypassLabel.setFont(lookAndFeel.getSideLabelFonts());
-  bypassLabel.setColour(juce::Label::textColourId, lookAndFeel.textColour);
+  /* bypassLabel.setColour(
+      juce::Label::textColourId,
+      CustomLookAndFeel::getColor(CustomLookAndFeel::Colors::textColour));*/
   addAndMakeVisible(bypassLabel);
 
   bypassButton.onClick = [this] {
@@ -27,7 +29,9 @@ PluginEditor::PluginEditor(PluginProcessor& p)
   addAndMakeVisible(bypassButton);
 
   waveformLabel.setFont(lookAndFeel.getSideLabelFonts());
-  waveformLabel.setColour(juce::Label::textColourId, lookAndFeel.textColour);
+  /* waveformLabel.setColour(
+      juce::Label::textColourId,
+      CustomLookAndFeel::getColor(CustomLookAndFeel::Colors::textColour));*/
   addAndMakeVisible(waveformLabel);
 
   waveformComboBox.addItemList(p.getParameterRefs().waveform.choices, 1);

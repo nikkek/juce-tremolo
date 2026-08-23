@@ -1,4 +1,18 @@
 namespace tremolo {
+CustomLookAndFeel::CustomLookAndFeel() {
+  setColour(juce::PopupMenu::backgroundColourId, juce::Colour{0xff14ab7b});
+  setColour(juce::PopupMenu::textColourId, juce::Colours::beige);
+  setColour(juce::ComboBox::textColourId, juce::Colours::beige);
+  setColour(juce::Label::textColourId, getColor(Colors::textColour));
+}
+
+juce::Colour CustomLookAndFeel::getColor(Colors colorName) {
+  static const std::array colors{juce::Colour{0xFF008171},
+                                 juce::Colour{0xFF008171},
+                                 juce::Colour{0xFFf3ff00}};
+  return colors.at(juce::toUnderlyingType(colorName));
+}
+
 void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
                                          juce::ToggleButton& button,
                                          bool shouldDrawButtonAsHighlighted,
@@ -24,7 +38,7 @@ void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
     }
     g.fillRoundedRectangle(bounds.toFloat(), 4.f);
 
-    g.setColour(accentColour);
+    g.setColour(getColor(Colors::accentColour));
   } else {
     auto buttonGradient = juce::ColourGradient::vertical(
         juce::Colour{0xFF14ab7b}, juce::Colour{0xFF189076}, bounds);
@@ -68,7 +82,7 @@ void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
   valueArc.addCentredArc(bounds.getCentreX(), bounds.getCentreY(), arcRadius,
                          arcRadius, 0.0f, rotaryStartAngle, toAngle, true);
 
-  g.setColour(accentColour);
+  g.setColour(getColor(Colors::accentColour));
   g.strokePath(valueArc, juce::PathStrokeType(4, juce::PathStrokeType::curved,
                                               juce::PathStrokeType::rounded));
 
