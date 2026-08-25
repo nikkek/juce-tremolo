@@ -142,6 +142,7 @@ void PluginEditor::resized() {
 
   const auto bypassLabelBounds =
       bypassButtonBounds.translated(0, -bypassButtonBounds.getHeight());
+  bypassLabel.setJustificationType(juce::Justification::bottomLeft);
   bypassLabel.setBounds(bypassLabelBounds);
 
   auto waveformComboBoxBounds = bounds;
@@ -153,6 +154,7 @@ void PluginEditor::resized() {
 
   const auto waveformLabelBounds =
       waveformComboBoxBounds.translated(0, -waveformComboBoxBounds.getHeight());
+  waveformLabel.setJustificationType(juce::Justification::bottomLeft);
   waveformLabel.setBounds(waveformLabelBounds);
 
   auto lookAndFeelComboBoxBounds = bounds;
