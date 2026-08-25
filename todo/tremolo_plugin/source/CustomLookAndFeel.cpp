@@ -192,10 +192,12 @@ void CustomLookAndFeel::positionComboBoxText(juce::ComboBox& box,
 juce::PopupMenu::Options CustomLookAndFeel::getOptionsForComboBoxPopupMenu(
     juce::ComboBox& box,
     juce::Label& label) {
+  auto bounds = box.getScreenBounds().reduced(2, 0);
   return LookAndFeel_V4::getOptionsForComboBoxPopupMenu(box, label)
       .withStandardItemHeight(24)
       .withMinimumWidth(128)
-      .withItemThatMustBeVisible(0);
+      .withItemThatMustBeVisible(0)
+      .withTargetScreenArea(bounds);
 }
 
 juce::FontOptions CustomLookAndFeel::geistRegular() {
