@@ -2,10 +2,14 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <juce_events/juce_events.h>
 
-class LongRunningTask : public juce::Component {
+class LongRunningTask : public juce::Component, public juce::Thread {
 public:
-  LongRunningTask() {
-    startButton.onClick = [this]() { findLargestPrimeNumberWithinLimit(); };
+  LongRunningTask() : juce::Thread("Long Running Task") {
+    startButton.onClick = [this]() {
+      if (startThread()) {
+        progress = 1.0;
+      }
+    };
     addAndMakeVisible(startButton);
 
     addAndMakeVisible(progressBar);
@@ -15,6 +19,10 @@ public:
 
     setSize(500, 300);
   }
+
+  ~LongRunningTask() override { stopThread(1000); }
+
+  void run() override { findLargestPrimeNumberWithinLimit(); }
 
   void resized() override {
     auto bounds = getLocalBounds();
@@ -26,12 +34,17 @@ public:
 
 private:
   void findLargestPrimeNumberWithinLimit() {
-    int largestPrimeNumberFound = 2;
+    auto progressPercent = 0;
+    constexpr auto progressMultiplier = 100.0 / limit;
 
-    constexpr auto limit = 10'000'000;
+    int largestPrimeNumberFound = 2;
 
     for (int currentExaminedNumber = 3; currentExaminedNumber < limit;
          currentExaminedNumber += 2) {
+      if (threadShouldExit()) {
+        return;
+      }
+
       auto isPrime = true;
 
       for (long i = 3; i <= std::sqrt(currentExaminedNumber); i++) {
@@ -45,19 +58,30 @@ private:
         largestPrimeNumberFound = currentExaminedNumber;
       }
 
-      progress = std::clamp(static_cast<double>(currentExaminedNumber) /
-                                static_cast<double>(limit),
-                            0.0, 1.0);
+      const auto newProgressPercent =
+          static_cast<int>(currentExaminedNumber * progressMultiplier);
+      if (progressPercent < newProgressPercent) {
+        progressPercent = newProgressPercent;
+        const auto newProgress = juce::jmap(
+            static_cast<double>(progressPercent), 0.0, 100.0, 0.0, 1.0);
+        juce::MessageManager::callAsync(
+            [this, newProgress]() { progress = newProgress; });
+      }
     }
 
-    progress = 1.0;
-    resultLabel.setText("Largest prime number < " + juce::String{limit} +
-                            " found: " + juce::String{largestPrimeNumberFound},
-                        juce::dontSendNotification);
+    juce::MessageManager::callAsync([this, largestPrimeNumberFound]() {
+      progress = 1.0;
+
+      resultLabel.setText(
+          "Largest prime number < " + juce::String{limit} +
+              " found: " + juce::String{largestPrimeNumberFound},
+          juce::dontSendNotification);
+    });
   }
 
   juce::TextButton startButton{"Click to start looking for prime numbers"};
   double progress{0.0};
+  static constexpr auto limit = 10'000'000;
   juce::ProgressBar progressBar{progress, juce::ProgressBar::Style::linear};
   juce::Label resultLabel{"result label", "The result should appear here"};
 };
