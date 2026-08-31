@@ -1,11 +1,17 @@
 namespace tremolo {
-class LfoVisualizer : public juce::Component {
+class LfoVisualizer : public juce::Component,
+                      private juce::AudioProcessorParameter::Listener {
 public:
   enum class LfoWaveform : size_t {
     sine = 0,
     triangle = 1,
     square = 2,
   };
+
+  ~LfoVisualizer() override {
+    if (waveformParameter != nullptr)
+      waveformParameter->removeListener(this);
+  }
 
   void paint(juce::Graphics& g) override {
     g.setColour(juce::Colours::beige);
@@ -51,7 +57,28 @@ public:
     repaint();
   }
 
+  void setParameter(juce::AudioParameterChoice& parameter) {
+    waveformParameter = &parameter;
+    parameter.addListener(this);
+
+    setWaveform(static_cast<LfoWaveform>(parameter.getIndex()));
+  }
+
+  void parameterValueChanged(int parameterIndex, float newValue) override {
+    juce::MessageManager::callAsync([this] {
+      const auto waveformIndex = waveformParameter->getIndex();
+      setWaveform(static_cast<LfoWaveform>(waveformIndex));
+    });
+  };
+
+  void parameterGestureChanged(int parameterIndex,
+                               bool gestureIsStarting) override {
+
+  };
+
 private:
+  juce::AudioParameterChoice* waveformParameter = nullptr;
+
   static float sine(float phase) { return std::sin(phase); }
 
   static float triangle(float phase) {

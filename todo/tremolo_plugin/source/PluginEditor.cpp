@@ -38,6 +38,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
   waveformAttachment.sendInitialUpdate();
   addAndMakeVisible(waveformComboBox);
 
+  lfoVisualizer.setParameter(p.getParameterRefs().waveform);
   addAndMakeVisible(lfoVisualizer);
 
   rateSlider.setSliderStyle(
