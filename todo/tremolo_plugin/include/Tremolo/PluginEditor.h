@@ -13,6 +13,7 @@ private:
   juce::ImageComponent logo;
 
   juce::Label versionLabel;
+  MessageOnClick messageOnClick;
 
   LfoVisualizer lfoVisualizer;
 

@@ -43,4 +43,5 @@ END_JUCE_MODULE_DECLARATION
 #include "include/Tremolo/PluginProcessor.h"
 #include "include/Tremolo/LfoVisualizer.h"
 #include "include/Tremolo/RateSlider.h"
+#include "include/Tremolo/MessageOnClick.h"
 #include "include/Tremolo/PluginEditor.h"

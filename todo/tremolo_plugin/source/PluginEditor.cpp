@@ -12,20 +12,21 @@ PluginEditor::PluginEditor(PluginProcessor& p)
       juce::ImageCache::getFromMemory(assets::Logo_png, assets::Logo_pngSize));
 
   addAndMakeVisible(background);
+  messageOnClick.setComponentToListenTo(logo);
   addAndMakeVisible(logo);
 
-#if JUCE_DEBUG
-  versionLabel.setText(__DATE__ " " __TIME__ " v" JucePlugin_VersionString,
-                       juce::dontSendNotification);
-#else
-  versionLabel.setText("v" JucePlugin_VersionString,
-                       juce::dontSendNotification);
-#endif
-  versionLabel.setJustificationType(juce::Justification::bottomRight);
-  versionLabel.setFont(lookAndFeel.getSideLabelFonts());
-  versionLabel.setColour(juce::Label::textColourId, juce::Colours::beige);
-  versionLabel.setInterceptsMouseClicks(false, false);
-  addAndMakeVisible(versionLabel);
+  /* #if JUCE_DEBUG
+    versionLabel.setText(__DATE__ " " __TIME__ " v" JucePlugin_VersionString,
+                         juce::dontSendNotification);
+  #else
+    versionLabel.setText("v" JucePlugin_VersionString,
+                         juce::dontSendNotification);
+  #endif
+    versionLabel.setJustificationType(juce::Justification::bottomRight);
+    versionLabel.setFont(lookAndFeel.getSideLabelFonts());
+    versionLabel.setColour(juce::Label::textColourId, juce::Colours::beige);
+    versionLabel.setInterceptsMouseClicks(false, false);
+    addAndMakeVisible(versionLabel);*/
 
   bypassLabel.setFont(lookAndFeel.getSideLabelFonts());
   /* bypassLabel.setColour(
