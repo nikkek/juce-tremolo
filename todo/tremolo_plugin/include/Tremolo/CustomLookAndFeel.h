@@ -14,6 +14,25 @@ public:
 
   static juce::Colour getColor(Colors colorName);
 
+  juce::ColourGradient makeGreenGradientInverted(
+      juce::Rectangle<float> bounds) {
+    auto gradient = juce::ColourGradient::vertical(
+        juce::Colour{0xFF189076}, juce::Colour{0xFF14ab7b}, bounds);
+
+    gradient.addColour(0.73, juce::Colour{0xFF009b77});
+
+    return gradient;
+  }
+
+  juce::ColourGradient makeGreenGradient(juce::Rectangle<float> bounds) {
+    auto gradient = juce::ColourGradient::vertical(
+        juce::Colour{0xFF14ab7b}, juce::Colour{0xFF189076}, bounds);
+
+    gradient.addColour(0.73, juce::Colour{0xFF009b77});
+
+    return gradient;
+  }
+
   void drawToggleButton(juce::Graphics&,
                         juce::ToggleButton&,
                         bool shouldDrawButtonAsHighlighted,

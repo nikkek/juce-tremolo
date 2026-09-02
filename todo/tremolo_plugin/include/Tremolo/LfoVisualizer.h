@@ -24,8 +24,8 @@ public:
     for (auto& waveform : waveforms)
       waveform.clear();
 
-    const auto halfHeight = getHeight() / 2;
-    const auto amplitude = halfHeight - strokeWidth / 2;
+    const auto halfHeight = getHeight() / 2.f;
+    const auto amplitude = halfHeight - strokeWidth / 2.f;
 
     path(LfoWaveform::sine).startNewSubPath(0.f, halfHeight);
 

@@ -14,6 +14,19 @@ PluginEditor::PluginEditor(PluginProcessor& p)
   addAndMakeVisible(background);
   addAndMakeVisible(logo);
 
+#if JUCE_DEBUG
+  versionLabel.setText(__DATE__ " " __TIME__ " v" JucePlugin_VersionString,
+                       juce::dontSendNotification);
+#else
+  versionLabel.setText("v" JucePlugin_VersionString,
+                       juce::dontSendNotification);
+#endif
+  versionLabel.setJustificationType(juce::Justification::bottomRight);
+  versionLabel.setFont(lookAndFeel.getSideLabelFonts());
+  versionLabel.setColour(juce::Label::textColourId, juce::Colours::beige);
+  versionLabel.setInterceptsMouseClicks(false, false);
+  addAndMakeVisible(versionLabel);
+
   bypassLabel.setFont(lookAndFeel.getSideLabelFonts());
   /* bypassLabel.setColour(
       juce::Label::textColourId,
@@ -58,7 +71,17 @@ PluginEditor::PluginEditor(PluginProcessor& p)
       juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
   depthSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
   depthSlider.setPopupDisplayEnabled(true, true, this);
+  depthSlider.textFromValueFunction = [](double value) {
+    return juce::String(value * 100.0, 0);
+  };
+  depthSlider.setTextValueSuffix(" %");
   addAndMakeVisible(depthSlider);
+
+  depthLabel.setJustificationType(juce::Justification::centred);
+  depthLabel.setInterceptsMouseClicks(false, false);
+  depthLabel.setFont(lookAndFeel.getComponentFonts());
+  depthLabel.setColour(juce::Label::textColourId, juce::Colours::beige);
+  addAndMakeVisible(depthLabel);
 
   /* lfoCurveWidthSlider.setRange(0.0, 10.0, 1.0);
   lfoCurveWidthSlider.onValueChange = [this] {
@@ -109,12 +132,14 @@ void PluginEditor::resized() {
 
   logo.setBounds({16, 16, 140, 22});
 
+  versionLabel.setBounds(bounds);
+
   lfoVisualizer.setBounds({19, 150, 502, 92});
   // lfoVisualizer.setWaveform(LfoVisualizer::LfoWaveform::triangle);
 
   auto rateSliderBounds = bounds;
-  rateSliderBounds.removeFromLeft(230);
-  rateSliderBounds.removeFromRight(230);
+  rateSliderBounds.removeFromLeft(180);
+  rateSliderBounds.removeFromRight(280);
   rateSliderBounds.removeFromTop(40);
   rateSliderBounds.removeFromBottom(150);
   rateSlider.setBounds(rateSliderBounds);
@@ -123,11 +148,14 @@ void PluginEditor::resized() {
   rateLabel.setBounds(rateLabelBounds);
 
   auto depthSliderBounds = bounds;
-  depthSliderBounds.removeFromLeft(130);
-  depthSliderBounds.removeFromRight(330);
+  depthSliderBounds.removeFromLeft(280);
+  depthSliderBounds.removeFromRight(180);
   depthSliderBounds.removeFromTop(40);
   depthSliderBounds.removeFromBottom(150);
   depthSlider.setBounds(depthSliderBounds);
+
+  const auto depthLabelBounds = depthSliderBounds;
+  depthLabel.setBounds(depthLabelBounds);
 
   /* auto lfoCurveWidthSliderBounds = bounds;
   lfoCurveWidthSliderBounds.removeFromTop(270);

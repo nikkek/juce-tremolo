@@ -60,6 +60,12 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
   set_directory_properties(PROPERTIES JUCE_VST3_COPY_DIR "$ENV{LOCALAPPDATA}/Programs/Common/VST3")
 endif()
 
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(VERSION "0.0.1")
+elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(VERSION "0.0.0")
+endif()
+
 # Adds a plugin target.
 set(TREMOLO_PLUGIN_NAME "Tremolow")
 juce_add_plugin(
@@ -67,7 +73,7 @@ juce_add_plugin(
   PRODUCT_NAME
     ${TREMOLO_PLUGIN_NAME}
   VERSION
-    0.0.0
+    ${VERSION}
   COMPANY_NAME
     "NKDrums"
   PLUGIN_MANUFACTURER_CODE
@@ -85,7 +91,7 @@ juce_add_plugin(
   NEEDS_MIDI_OUTPUT
     FALSE
   VST3_AUTO_MANIFEST
-    FALSE
+    TRUE
   COPY_PLUGIN_AFTER_BUILD
     TRUE
 )

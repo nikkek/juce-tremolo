@@ -12,13 +12,16 @@ private:
   juce::ImageComponent background;
   juce::ImageComponent logo;
 
+  juce::Label versionLabel;
+
   LfoVisualizer lfoVisualizer;
 
   juce::Label rateLabel{"rate label", "RATE"};
   juce::Slider rateSlider;
   juce::SliderParameterAttachment rateAttachment;
 
-  RateSlider depthSlider;
+  juce::Label depthLabel{"depth label", "DEPTH"};
+  juce::Slider depthSlider;
   juce::SliderParameterAttachment depthAttachment;
 
   juce::Label bypassLabel{"bypass label", "BYPASS"};

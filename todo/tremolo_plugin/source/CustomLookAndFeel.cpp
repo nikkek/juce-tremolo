@@ -5,7 +5,7 @@ void drawButtonInset(juce::Rectangle<float> bounds, juce::Graphics& g) {
   auto outlineGradient = juce::ColourGradient::vertical(
       juce::Colour{0xFF008171}, juce::Colour{0xFF004d44}, bounds);
   g.setGradientFill(outlineGradient);
-  g.fillRoundedRectangle(bounds.toFloat(), 6.f);
+  g.fillRoundedRectangle(bounds.reduced(1).toFloat(), 6.f);
 }
 
 void drawGreenGradientButton(const juce::Rectangle<float> bounds,
@@ -20,14 +20,22 @@ void drawGreenGradientButton(const juce::Rectangle<float> bounds,
 }  // namespace
 
 CustomLookAndFeel::CustomLookAndFeel() {
-  setColour(juce::PopupMenu::backgroundColourId, juce::Colour{0xff14ab7b});
+  setColour(juce::PopupMenu::backgroundColourId, getColor(Colors::darkGreen));
   setColour(juce::PopupMenu::textColourId, juce::Colours::beige);
   setColour(juce::PopupMenu::highlightedBackgroundColourId,
-            getColor(Colors::darkGreen));
+            juce::Colour{0xff14ab7b});
   setColour(juce::PopupMenu::highlightedTextColourId,
             getColor(Colors::accentColour));
+
   setColour(juce::ComboBox::textColourId, juce::Colours::beige);
+
   setColour(juce::Label::textColourId, getColor(Colors::textColour));
+
+  setColour(juce::BubbleComponent::backgroundColourId,
+            getColor(Colors::darkGreen));
+  setColour(juce::BubbleComponent::outlineColourId, juce::Colour{0xff14ab7b});
+
+  setColour(juce::TooltipWindow::textColourId, juce::Colours::beige);
 }
 
 juce::Colour CustomLookAndFeel::getColor(Colors colorName) {
@@ -48,12 +56,12 @@ void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
   drawButtonInset(outlineBounds, g);
 
   if (button.getToggleState()) {
-    auto buttonGradient = juce::ColourGradient::vertical(
+    /* auto buttonGradient = juce::ColourGradient::vertical(
         juce::Colour{0xFF189076}, juce::Colour{0xFF14ab7b}, bounds);
 
-    buttonGradient.addColour(0.73, juce::Colour{0xFF009b77});
+    buttonGradient.addColour(0.73, juce::Colour{0xFF009b77});*/
 
-    g.setGradientFill(buttonGradient);
+    g.setGradientFill(makeGreenGradientInverted(bounds));
 
     if (shouldDrawButtonAsHighlighted) {
       g.setOpacity(0.7f);
@@ -62,11 +70,15 @@ void CustomLookAndFeel::drawToggleButton(juce::Graphics& g,
 
     g.setColour(getColor(Colors::accentColour));
   } else {
-    auto buttonGradient = juce::ColourGradient::vertical(
+    /* auto buttonGradient = juce::ColourGradient::vertical(
         juce::Colour{0xFF14ab7b}, juce::Colour{0xFF189076}, bounds);
 
     buttonGradient.addColour(0.73, juce::Colour{0xFF009b77});
-    g.setGradientFill(buttonGradient);
+    g.setGradientFill(buttonGradient);*/
+
+    // drawGreenGradientButton(bounds, g);
+
+    g.setGradientFill(makeGreenGradient(bounds));
 
     if (shouldDrawButtonAsHighlighted) {
       g.setOpacity(0.7f);
@@ -129,6 +141,15 @@ void CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
   g.setOpacity(0.7f);
   g.fillEllipse(boundsInner);
 
+  // Dot
+  const auto centre = bounds.getCentre();
+
+  const auto dotPosition =
+      centre.getPointOnCircumference(arcRadius - 12.f, toAngle);
+
+  g.setColour(getColor(Colors::accentColour));
+  g.fillEllipse(dotPosition.x - 2.f, dotPosition.y - 2.f, 4.0f, 4.0f);
+
   // Gloss
   auto glossBounds = boundsInner;
 
@@ -165,7 +186,14 @@ void CustomLookAndFeel::drawComboBox(juce::Graphics& g,
   drawButtonInset(bounds, g);
 
   const auto buttonBounds = bounds.reduced(2);
-  drawGreenGradientButton(buttonBounds, g);
+
+  if (box.isPopupActive()) {
+    g.setGradientFill(makeGreenGradientInverted(bounds));
+  } else {
+    g.setGradientFill(makeGreenGradient(bounds));
+  }
+
+  g.fillRoundedRectangle(buttonBounds.toFloat(), 4.f);
 
   auto arrowBounds = buttonBounds.reduced(8, 9);
   arrowBounds.removeFromLeft(104);
